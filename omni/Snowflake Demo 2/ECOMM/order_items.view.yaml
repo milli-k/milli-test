@@ -159,4 +159,38 @@ measures:
       COALESCE(${ecomm__order_items.margin_average}, 0) /
       ${ecomm__order_items.count} END
     label: Margin Per Order
-    format: ""
+
+  count_cancelled:
+    label: Count Cancelled
+    aggregate_type: count
+    filters:
+      status:
+        is: Cancelled
+
+  count_complete:
+    label: Count Complete
+    aggregate_type: count
+    filters:
+      status:
+        is: Complete
+
+  count_processing:
+    label: Count Processing
+    aggregate_type: count
+    filters:
+      status:
+        is: Processing
+
+  count_returned:
+    label: Count Returned
+    aggregate_type: count
+    filters:
+      status:
+        is: Returned
+
+  count_shipped:
+    label: Count Shipped
+    aggregate_type: count
+    filters:
+      status:
+        is: Shipped
