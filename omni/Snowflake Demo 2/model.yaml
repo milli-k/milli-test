@@ -1,1 +1,14 @@
 included_schemas: [ ECOMM, PUBLIC ]
+
+skills:
+  brand_sales_lookup:
+    label: Brand Sales Lookup
+    input: Ask the user which brand they want to look up sales data for before
+      proceeding.
+    description: "The user has provided a brand name. Using the Orders topic, filter
+      order items to the past 7 days and filter by the brand the user specified
+      (use a case-insensitive contains match on the product_brand field). Show
+      the following metrics broken down by day: total number of orders, total
+      revenue (sum of sale price), number of unique customers, and average order
+      value. Present a daily trend table and a line chart showing daily revenue
+      over the 7-day period. Summarize the overall totals at the end."
