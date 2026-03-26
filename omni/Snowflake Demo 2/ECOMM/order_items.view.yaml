@@ -6,57 +6,137 @@ dimensions:
   id:
     sql: '"ID"'
     format: ID
+    description: Unique identifier for each order item record.
     primary_key: true
+    ai_context: Use this as the primary key for order items. Reference this field
+      when counting distinct order items or drilling into individual line items.
 
   order_id:
     sql: '"ORDER_ID"'
     format: ID
+    description: Identifier for the parent order that this item belongs to. Multiple
+      items can share the same order_id.
+    ai_context: Use this to group or count orders (distinct order_id values). An
+      order can contain multiple items, so use COUNT DISTINCT on this field to
+      count orders rather than items.
 
   user_id:
     sql: '"USER_ID"'
     format: ID
+    description: Identifier for the customer who placed the order containing this item.
+    ai_context: Use this to link order items to the users/customers view. Use COUNT
+      DISTINCT on this field to count unique customers who have purchased.
 
   inventory_item_id:
     sql: '"INVENTORY_ITEM_ID"'
     format: ID
+    description: Identifier for the specific inventory item (SKU) associated with
+      this order line.
+    ai_context: Use this to join to inventory data. Each order item corresponds to
+      one inventory item being sold.
 
   sale_price:
     sql: '"SALE_PRICE"'
+    description: The price at which this item was sold to the customer, in USD.
+    ai_context: Use this for revenue analysis. Sum this field to calculate total
+      revenue. This is the actual price paid by the customer, which may differ
+      from the list price due to discounts.
 
   status:
     sql: '"STATUS"'
+    description: The current fulfillment status of the order item (e.g., Complete,
+      Returned, Shipped, Processing, Cancelled).
+    ai_context: Use this to filter or segment order items by their lifecycle stage.
+      Common values include Complete, Returned, Shipped, Processing, and
+      Cancelled. Filter to 'Complete' for revenue analysis on fulfilled orders.
 
   created_at:
     sql: '"CREATED_AT"'
+    description: Timestamp when the order item was created (i.e., when the order was
+      placed).
     timeframes: [ raw, date, week, month, quarter, year, hour_of_day, month_name ]
+    ai_context: Use this as the primary date field for time-series analysis of
+      orders and revenue. Supports timeframes including date, week, month,
+      quarter, and year. This is the order placement date, not the shipment or
+      delivery date.
 
   returned_at:
     sql: '"RETURNED_AT"'
+    description: Timestamp when the item was returned by the customer. Null if the
+      item has not been returned.
+    ai_context: Use this to analyze return timing and return rates. This field is
+      null for items that have not been returned. Pair with is_returned for
+      filtering returned items.
 
   shipped_at:
     sql: '"SHIPPED_AT"'
+    description: Timestamp when the item was shipped from the warehouse. Null if the
+      item has not yet shipped.
+    ai_context: Use this to analyze shipping timelines and fulfillment speed. Null
+      values indicate the item has not yet been shipped. Compare with created_at
+      to calculate time-to-ship.
 
   delivered_at:
     sql: '"DELIVERED_AT"'
+    description: Timestamp when the item was delivered to the customer. Null if the
+      item has not yet been delivered.
+    ai_context: Use this to analyze delivery timelines and on-time delivery
+      performance. Null values indicate the item has not yet been delivered.
+      Compare with shipped_at to calculate transit time.
 
   is_returned:
     sql: '"IS_RETURNED"'
+    description: Boolean flag indicating whether this order item has been returned
+      by the customer.
+    ai_context: Use this as a simple true/false filter to segment returned vs.
+      non-returned items. More convenient than filtering on returned_at being
+      non-null. Use to calculate return rates.
 
   is_delivered:
     sql: '"IS_DELIVERED"'
+    description: Boolean flag indicating whether this order item has been
+      successfully delivered to the customer.
+    ai_context: Use this as a simple true/false filter to segment delivered vs.
+      undelivered items. More convenient than filtering on delivered_at being
+      non-null. Use to calculate delivery rates.
 
   is_shipped:
     sql: '"IS_SHIPPED"'
+    description: Boolean flag indicating whether this order item has been shipped
+      from the warehouse.
+    ai_context: Use this as a simple true/false filter to segment shipped vs.
+      unshipped items. More convenient than filtering on shipped_at being
+      non-null. Use to calculate shipment rates or identify backlogged items.
 
   margin:
     sql: '"MARGIN"'
+    description: The profit margin for this order item, representing the difference
+      between sale price and cost.
+    ai_context: Use this for profitability analysis. Sum or average this field to
+      understand gross profit. Compare with sale_price to calculate margin
+      percentage. Negative values indicate items sold at a loss.
 
   months_since_signup:
     sql: '"MONTHS_SINCE_SIGNUP"'
+    description: The number of months between the customer's signup date and the
+      date this order item was created.
+    ai_context: Use this to analyze customer purchase behavior relative to their
+      tenure. Useful for cohort analysis and understanding how long after signup
+      customers make purchases. Bin this field to group customers by tenure
+      stage.
 
   time_to_ship:
     sql: '"TIME_TO_SHIP"'
+    description: The number of days between when the order was placed (created_at)
+      and when it was shipped (shipped_at).
+    ai_context: Use this to measure fulfillment speed and warehouse efficiency.
+      Lower values indicate faster processing. Null if the item has not yet
+      shipped. Average this field to track operational performance over time.
 
 measures:
   count:
+    description: Total count of order item records.
     aggregate_type: count
+    ai_context: Use this to count the number of order line items. Note this counts
+      individual items, not orders — use COUNT DISTINCT on order_id to count
+      unique orders, or COUNT DISTINCT on user_id to count unique customers.
