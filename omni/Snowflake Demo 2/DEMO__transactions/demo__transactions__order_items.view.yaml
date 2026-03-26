@@ -1,5 +1,4 @@
 # Reference this view as demo__transactions__order_items
-# View is defined in the semantic view TRANSACTIONS in the data warehouse
 description: This table stores information about individual items within custome
   orders, including the order and user details, item specifics, pricing,
   shipping and delivery status, and additional metrics such as margin and time

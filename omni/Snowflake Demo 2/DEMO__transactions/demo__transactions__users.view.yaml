@@ -1,5 +1,4 @@
 # Reference this view as demo__transactions__users
-# View is defined in the semantic view TRANSACTIONS in the data warehouse
 description: This table stores information about users, including their personal
   details suc as name, email, age, location, and demographic information, as
   well as their online activity data such as traffic source and creation

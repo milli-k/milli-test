@@ -1,5 +1,4 @@
 # Reference this view as demo__transactions__inventory_items
-# View is defined in the semantic view TRANSACTIONS in the data warehouse
 description: This table stores information about individual inventory items,
   includng their product details, cost, and sales history. It tracks when each
   item was created and sold, as well as its category, brand, retail price, and
