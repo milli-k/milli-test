@@ -1,0 +1,5 @@
+base_view: ecomm__order_items
+label: Orders
+
+joins:
+  ecomm__users: {}
