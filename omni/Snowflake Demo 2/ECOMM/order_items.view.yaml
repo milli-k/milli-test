@@ -140,3 +140,23 @@ measures:
     ai_context: Use this to count the number of order line items. Note this counts
       individual items, not orders — use COUNT DISTINCT on order_id to count
       unique orders, or COUNT DISTINCT on user_id to count unique customers.
+
+  sale_price_average:
+    sql: ${ecomm__order_items.sale_price}
+    aggregate_type: average
+
+  time_to_ship_average:
+    sql: ${ecomm__order_items.time_to_ship}
+    description: Average Time to Ship for Shipped Order
+    aggregate_type: average
+
+  margin_average:
+    sql: ${ecomm__order_items.margin}
+    aggregate_type: average
+
+  margin_per_order:
+    sql: CASE WHEN ${ecomm__order_items.count} = 0 THEN NULL ELSE
+      COALESCE(${ecomm__order_items.margin_average}, 0) /
+      ${ecomm__order_items.count} END
+    label: Margin Per Order
+    format: ""
