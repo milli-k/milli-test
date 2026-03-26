@@ -1,5 +1,15 @@
 base_view: ecomm__order_items
 label: Orders
 
+fields:
+  [
+    all_views.*,
+    -ecomm__order_items.is_shipped,
+    -ecomm__order_items.is_returned,
+    -ecomm__order_items.is_delivered
+  ]
+
 joins:
   ecomm__users: {}
+  ecomm__inventory_items:
+    ecomm__products: {}
