@@ -160,3 +160,10 @@ measures:
       ${ecomm__order_items.count} END
     label: Margin Per Order
     format: ""
+
+  sale_price_sum:
+    sql: ${ecomm__order_items.sale_price}
+    label: Total Revenue
+    description: "(Sum) Sale Price: The price at which this item was sold to the
+      customer, in USD."
+    aggregate_type: sum
