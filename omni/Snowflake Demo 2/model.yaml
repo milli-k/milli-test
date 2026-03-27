@@ -1,14 +1,23 @@
 included_schemas: [ ECOMM, PUBLIC ]
 
 skills:
-  brand_sales_lookup:
-    label: Brand Sales Lookup
-    input: Ask the user which brand they want to look up sales data for before
-      proceeding.
-    description: "The user has provided a brand name. Using the Orders topic, filter
-      order items to the past 7 days and filter by the brand the user specified
-      (use a case-insensitive contains match on the product_brand field). Show
-      the following metrics broken down by day: total number of orders, total
-      revenue (sum of sale price), number of unique customers, and average order
-      value. Present a daily trend table and a line chart showing daily revenue
-      over the 7-day period. Summarize the overall totals at the end."
+  low_margin_brands_by_category:
+    label: Low Margin Brands
+    input: Ask the user which product category they want to analyze before proceeding.
+    description: "The user has provided a product category. Using the Orders topic,
+      filter to that category (use a case-insensitive contains match on the
+      product category field). Query all brands in that category and show: brand
+      name, average margin, average sale price, margin as a percentage of sale
+      price (calculated), and order item count. Sort by average margin ascending
+      so the lowest-margin brands appear first. Visualize the results as a
+      horizontal bar chart with brands on the Y axis and average margin on the X
+      axis, colored from red (lowest) to yellow (highest). Then analyze the
+      results and identify the 3 brands most worth acting on. Prioritize brands
+      that have: (1) very low absolute margin AND meaningful order volume — high
+      impact if improved, (2) margin that seems disproportionately low relative
+      to their sale price — potential pricing opportunity, (3) the highest
+      volume brand even if margin % is not the worst — scale means even small
+      improvements have outsized impact. For each of the 3 recommended brands,
+      explain specifically why they are worth acting on and suggest a concrete
+      action (e.g., renegotiate cost with supplier, raise retail price, reduce
+      promotional discounting, or consider discontinuing the brand)."
