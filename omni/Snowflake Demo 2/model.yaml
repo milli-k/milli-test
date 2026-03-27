@@ -7,9 +7,17 @@ skills:
     description: "The user has provided a product category. Using the Orders topic,
       filter to that category (use a case-insensitive contains match on the
       product category field). Query all brands in that category and show: brand
-      name, average margin, average sale price, margin as a percentage of sale
-      price (calculated), and order item count. Sort by average margin ascending
-      so the lowest-margin brands appear first. Visualize the results as a
+      name, average margin, average sale price, and order item count. Set the
+      query row limit to 500 to ensure all brands are returned — do not use the
+      default limit. Sort by average margin ascending so the lowest-margin
+      brands appear first. After the query runs, add a margin % column using the
+      GenerateCalculations tool. The formula must be: average margin divided by
+      average sale price, expressed as a percentage. Do not multiply by 100 —
+      format the column as a percentage and the formatting will handle the
+      display. Double-check that the margin % values look reasonable (e.g. a
+      brand with $10 avg margin and $25 avg sale price should show ~40%). If the
+      values look wrong (e.g. showing 4000% instead of 40%), the column
+      references are likely off — fix and retry. Visualize the results as a
       horizontal bar chart with brands on the Y axis and average margin on the X
       axis, colored from red (lowest) to yellow (highest). Then analyze the
       results and identify the 3 brands most worth acting on. Prioritize brands

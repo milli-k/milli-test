@@ -159,7 +159,6 @@ measures:
       COALESCE(${ecomm__order_items.margin_average}, 0) /
       ${ecomm__order_items.count} END
     label: Margin Per Order
-    format: ""
 
   sale_price_sum:
     sql: ${ecomm__order_items.sale_price}
