@@ -1,3 +1,65 @@
+# Relationship is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+- join_from_view: demo__transactions__order_items
+  join_to_view: ecomm__users
+  join_type: always_left
+  on_sql: ${demo__transactions__order_items._entity_user_id} =
+    ${ecomm__users._entity_user_id}
+  relationship_type: assumed_many_to_one
+
+# Relationship is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+- join_from_view: ecomm__inventory_management_sv__order_items
+  join_to_view: ecomm__users
+  join_type: always_left
+  on_sql: ${ecomm__inventory_management_sv__order_items._entity_user_id} =
+    ${ecomm__users._entity_user_id}
+  relationship_type: assumed_many_to_one
+
+# Relationship is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+- join_from_view: ecomm__omni__order_items_curated__ecomm__order_items
+  join_to_view: ecomm__users
+  join_type: always_left
+  on_sql: ${ecomm__omni__order_items_curated__ecomm__order_items._entity_user_id}
+    = ${ecomm__users._entity_user_id}
+  relationship_type: assumed_many_to_one
+
+# Relationship is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+- join_from_view: ecomm__sales__order_items
+  join_to_view: ecomm__users
+  join_type: always_left
+  on_sql: ${ecomm__sales__order_items._entity_user_id} =
+    ${ecomm__users._entity_user_id}
+  relationship_type: assumed_many_to_one
+
+# Relationship is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+- join_from_view: ecomm__test__order_items
+  join_to_view: ecomm__users
+  join_type: always_left
+  on_sql: ${ecomm__test__order_items._entity_user_id} = ${ecomm__users._entity_user_id}
+  relationship_type: assumed_many_to_one
+
+# Relationship is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+- join_from_view: ecomm__omni_order_items_curated_sv__ecomm_order_items
+  join_to_view: ecomm__users
+  join_type: always_left
+  on_sql: ${ecomm__omni_order_items_curated_sv__ecomm_order_items._entity_user_id}
+    = ${ecomm__users._entity_user_id}
+  relationship_type: assumed_many_to_one
+
+# Relationship is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+- join_from_view: ecomm__omni_order_items_embed_sv__ecomm_order_items
+  join_to_view: ecomm__users
+  join_type: always_left
+  on_sql: ${ecomm__omni_order_items_embed_sv__ecomm_order_items._entity_user_id} =
+    ${ecomm__users._entity_user_id}
+  relationship_type: assumed_many_to_one
+
+# Relationship is defined in the data warehouse
+- join_from_view: demo__transactions__order_items
+  join_to_view: demo__transactions__users
+  join_type: always_left
+  on_sql: ${demo__transactions__order_items.user_id} = ${demo__transactions__users.id}
+  relationship_type: assumed_many_to_one
+
 # Relationship is defined in the data warehouse
 - join_from_view: ecomm__inventory_management_sv__inventory_items
   join_to_view: ecomm__inventory_management_sv__products
@@ -60,13 +122,6 @@
   on_sql: ${ecomm__sales__order_items.user_id} = ${ecomm__sales__users.id}
   relationship_type: assumed_many_to_one
 
-# Relationship is defined in the data warehouse
-- join_from_view: demo__transactions__order_items
-  join_to_view: demo__transactions__users
-  join_type: always_left
-  on_sql: ${demo__transactions__order_items.user_id} = ${demo__transactions__users.id}
-  relationship_type: assumed_many_to_one
-
 - join_from_view: ecomm__events
   join_to_view: ecomm__users
   join_type: always_left
@@ -104,10 +159,11 @@
   on_sql: ${ecomm__inventory_items.product_id} = ${ecomm__products.id}
   relationship_type: assumed_many_to_one
 
+# Relationship is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
 - join_from_view: ecomm__order_items
   join_to_view: ecomm__users
   join_type: always_left
-  on_sql: ${ecomm__order_items.user_id} = ${ecomm__users.id}
+  on_sql: ${ecomm__order_items._entity_user_id} = ${ecomm__users._entity_user_id}
   relationship_type: assumed_many_to_one
 
 - join_from_view: ecomm__order_items

@@ -1,8 +1,7 @@
 # Reference this view as demo__transactions__users
-description: This table stores information about users, including their personal
-  details suc as name, email, age, location, and demographic information, as
-  well as their online activity data such as traffic source and creation
-  timestamp.
+label: Uers
+#This description was pulled from dbt.
+description: Dimension table containing information about users
 
 schema: ECOMM
 folder: DEMO/transactions
@@ -13,85 +12,112 @@ dimensions:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"ID"'
     format: ID
-    description: Unique identifier for each user in the system.
+    #This description was pulled from dbt.
+    description: Unique identifier for each user
     primary_key: true
 
   first_name:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"FIRST_NAME"'
-    description: The first name of the user.
+    #This description was pulled from dbt.
+    description: First name of the user
 
   last_name:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"LAST_NAME"'
-    description: The LAST_NAME column stores the surname of a user, representing
-      their family name or the name they are commonly known by.
+    #This description was pulled from dbt.
+    description: Last name of the user
 
   email:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"EMAIL"'
-    description: The email address associated with a user's account.
+    #This description was pulled from dbt.
+    description: Email address of the user
 
   age:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"AGE"'
-    description: The age of the user in years.
+    #This description was pulled from dbt.
+    description: Age of the user
 
   city:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"CITY"'
-    description: The CITY column represents the geographical location or urban area
-      where a user is based, providing a way tounderstand the user's regional
-      context and potentially inform location-based analysis or targeting.
+    #This description was pulled from dbt.
+    description: City where the user is located
 
   state:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"STATE"'
-    description: The geographic area within London where a user is located,
-      categorized by local authority borough.
+    #This description was pulled from dbt.
+    description: State where the user is located
 
   country:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"COUNTRY"'
-    description: The country of origin or residence of the user.
+    #This description was pulled from dbt.
+    description: Country where the user is located
 
   zip:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"ZIP"'
-    description: Postal Code of the user's location.
+    #This description was pulled from dbt.
+    description: ZIP code of the user's location
 
   latitude:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"LATITUDE"'
-    description: The latitude coordinate of the user's location, representing the
-      angular distance north or south of the equator, measured in decimal
-      degrees.
+    #This description was pulled from dbt.
+    description: Geographical latitude of the user's location
 
   longitude:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"LONGITUDE"'
-    description: Longitude coordinate of the user's location, representing the
-      distance east or west of the prime meridian, measured in decimal degrees.
+    #This description was pulled from dbt.
+    description: Geographical longitude of the user's location
 
   gender:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"GENDER"'
-    description: The GENDER column captures the biological or self-identified sex of
-      a user, categorized as either Male or Female, to facilitate analysis and
-      reporting by demographic characteristics.
+    #This description was pulled from dbt.
+    description: Gender of the user
 
   created_at:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"CREATED_AT"'
-    description: Date and time when the user account was created.
+    #This description was pulled from dbt.
+    description: Timestamp when the user account was created
 
   traffic_source:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"TRAFFIC_SOURCE"'
-    description: The source of traffic that led a user to the website or
-      application, such as search engines, organic browsing, or email marketing
-      campaigns.
+    #This description was pulled from dbt.
+    description: Source of traffic that led to user signup
+
+  _entity_user_id:
+    # Entity is defined in the 'sem_uers' dbt semantic model (models/semantic-models/sem_users.yml)
+    sql: ${id}
+    hidden: true
 
 measures:
   count:
     aggregate_type: count
+
+  average_age:
+    # Measure is defined in the 'sem_uers' dbt semantic model (models/semantic-models/sem_users.yml)
+    sql: ${ecomm__users.age}
+    aggregate_type: average
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: users
+  target_schema: demo
+  description: Dimension table containing information about users
+  config:
+    schema: ecomm
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('int_ecomm__users')) }}
+    from {{ ref('int_ecomm__users') }}
+  referenced_by: [ order_items, shipped_order_items ]

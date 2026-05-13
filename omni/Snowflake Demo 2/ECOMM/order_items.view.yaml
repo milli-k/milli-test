@@ -1,4 +1,8 @@
 # Reference this view as ecomm__order_items
+label: Order Items
+#This description was pulled from dbt.
+description: Dimension table containing information about customer orders
+
 schema: ECOMM
 table_name: ORDER_ITEMS
 
@@ -46,6 +50,7 @@ dimensions:
     sql: '"STATUS"'
     description: The current fulfillment status of the order item (e.g., Complete,
       Returned, Shipped, Processing, Cancelled).
+    all_values: [ Complete, Shipped, Processing, Cancelled, Returned ]
     ai_context: Use this to filter or segment order items by their lifecycle stage.
       Common values include Complete, Returned, Shipped, Processing, and
       Cancelled. Filter to 'Complete' for revenue analysis on fulfilled orders.
@@ -133,6 +138,25 @@ dimensions:
       Lower values indicate faster processing. Null if the item has not yet
       shipped. Average this field to track operational performance over time.
 
+  status_complete:
+    # Dimension is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: CASE WHEN ${status} = 'Complete' THEN TRUE ELSE FALSE END
+
+  _entity_order_item_id:
+    # Entity is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${id}
+    hidden: true
+
+  _entity_user_id:
+    # Entity is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${user_id}
+    hidden: true
+
+  _entity_inventory_item_id:
+    # Entity is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${inventory_item_id}
+    hidden: true
+
 measures:
   count:
     description: Total count of order item records.
@@ -160,9 +184,62 @@ measures:
       ${ecomm__order_items.count} END
     label: Margin Per Order
 
+  total_sales:
+    # Measure is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${sale_price}
+    aggregate_type: sum
+
+  avg_sale_price:
+    # Measure is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${sale_price}
+    aggregate_type: average
+
+  total_margin:
+    # Measure is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${margin}
+    aggregate_type: sum
+
+  avg_margin:
+    # Measure is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${margin}
+    aggregate_type: average
+
   sale_price_sum:
     sql: ${ecomm__order_items.sale_price}
     label: Total Revenue
     description: "(Sum) Sale Price: The price at which this item was sold to the
       customer, in USD."
     aggregate_type: sum
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: order_items
+  target_schema: demo
+  description: Dimension table containing information about customer orders
+  config:
+    schema: ecomm
+    materialized: table
+  code: |-
+    select
+        order_items.id,
+        order_items.order_id,
+        order_items.user_id,
+        order_items.inventory_item_id,
+        order_items.sale_price,
+        order_items.status,
+        order_items.created_at,
+        order_items.returned_at,
+        order_items.shipped_at,
+        order_items.delivered_at as delivered_at,
+        order_items.returned_at is not null as is_returned,
+        order_items.delivered_at is not null as is_delivered,
+        order_items.shipped_at is not null as is_shipped,
+        order_items.sale_price - inventory_items.cost as margin,
+        datediff(month, users.created_at, order_items.created_at) as months_since_signup,
+        datediff('days', order_items.created_at, order_items.shipped_at) as time_to_ship
+    from {{ ref("int_ecomm__order_items") }} as order_items
+    left join
+        {{ ref("int_ecomm__inventory_items") }} as inventory_items
+        on order_items.inventory_item_id = inventory_items.id
+    left join {{ ref("int_ecomm__users") }} as users on order_items.user_id = users.id
+  referenced_by: [ order_items_agg, monthly_sales_overview ]

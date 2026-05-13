@@ -1,4 +1,7 @@
 # Reference this view as ecomm__order_items_agg
+#This description was pulled from dbt.
+description: Fact table containing aggregated information about order items
+
 schema: ECOMM
 table_name: ORDER_ITEMS_AGG
 
@@ -9,3 +12,23 @@ dimensions:
 measures:
   count:
     aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: order_items_agg
+  target_schema: demo
+  description: Fact table containing aggregated information about order items
+  config:
+    schema: ecomm
+    materialized: table
+  code: |-
+    select
+        order_id as order_id,
+        user_id as user_id,
+        coalesce(sum(sale_price), 0) as total_sale_price,
+        count(*) as count
+    from {{ ref('order_items') }} as order_items
+    where status not in ('Returned', 'Cancelled') or status is null
+    group by 1, 2
+    order by 4 desc nulls last
+    limit 1000
