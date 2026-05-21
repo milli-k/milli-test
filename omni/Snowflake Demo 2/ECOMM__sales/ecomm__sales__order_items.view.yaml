@@ -146,6 +146,10 @@ dimensions:
         shipping time
       ]
 
+  completed_orders:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: "\"STATUS\" = 'Complete'"
+
   status_complete:
     # Dimension is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
     sql: CASE WHEN ${status} = 'Complete' THEN TRUE ELSE FALSE END
