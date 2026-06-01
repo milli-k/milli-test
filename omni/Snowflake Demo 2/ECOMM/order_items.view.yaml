@@ -20,6 +20,7 @@ dimensions:
     format: ID
     description: Identifier for the parent order that this item belongs to. Multiple
       items can share the same order_id.
+    synonyms: [ order number, order identifier, purchase id ]
     ai_context: Use this to group or count orders (distinct order_id values). An
       order can contain multiple items, so use COUNT DISTINCT on this field to
       count orders rather than items.
@@ -28,6 +29,7 @@ dimensions:
     sql: '"USER_ID"'
     format: ID
     description: Identifier for the customer who placed the order containing this item.
+    synonyms: [ customer id, buyer id ]
     ai_context: Use this to link order items to the users/customers view. Use COUNT
       DISTINCT on this field to count unique customers who have purchased.
 
@@ -42,24 +44,27 @@ dimensions:
   sale_price:
     sql: '"SALE_PRICE"'
     description: The price at which this item was sold to the customer, in USD.
+    synonyms: [ price, amount, revenue, sales price ]
     ai_context: Use this for revenue analysis. Sum this field to calculate total
       revenue. This is the actual price paid by the customer, which may differ
       from the list price due to discounts.
 
   status:
     sql: '"STATUS"'
-    description: The current fulfillment status of the order item (e.g., Complete,
-      Returned, Shipped, Processing, Cancelled).
+    description: "The current fulfillment status of the order item. Values:
+      Complete, Returned, Shipped, Processing, Cancelled."
     all_values: [ Complete, Shipped, Processing, Cancelled, Returned ]
+    synonyms: [ order status, fulfillment status, state ]
     ai_context: Use this to filter or segment order items by their lifecycle stage.
       Common values include Complete, Returned, Shipped, Processing, and
-      Cancelled. Filter to 'Complete' for revenue analysis on fulfilled orders.
+      Cancelled. Filter to Complete for revenue analysis on fulfilled orders.
 
   created_at:
     sql: '"CREATED_AT"'
     description: Timestamp when the order item was created (i.e., when the order was
       placed).
     timeframes: [ raw, date, week, month, quarter, year, hour_of_day, month_name ]
+    synonyms: [ order date, purchase date, date ordered, transaction date ]
     ai_context: Use this as the primary date field for time-series analysis of
       orders and revenue. Supports timeframes including date, week, month,
       quarter, and year. This is the order placement date, not the shipment or
@@ -69,6 +74,7 @@ dimensions:
     sql: '"RETURNED_AT"'
     description: Timestamp when the item was returned by the customer. Null if the
       item has not been returned.
+    synonyms: [ return date ]
     ai_context: Use this to analyze return timing and return rates. This field is
       null for items that have not been returned. Pair with is_returned for
       filtering returned items.
@@ -77,6 +83,7 @@ dimensions:
     sql: '"SHIPPED_AT"'
     description: Timestamp when the item was shipped from the warehouse. Null if the
       item has not yet shipped.
+    synonyms: [ ship date, shipment date ]
     ai_context: Use this to analyze shipping timelines and fulfillment speed. Null
       values indicate the item has not yet been shipped. Compare with created_at
       to calculate time-to-ship.
@@ -85,6 +92,7 @@ dimensions:
     sql: '"DELIVERED_AT"'
     description: Timestamp when the item was delivered to the customer. Null if the
       item has not yet been delivered.
+    synonyms: [ delivery date ]
     ai_context: Use this to analyze delivery timelines and on-time delivery
       performance. Null values indicate the item has not yet been delivered.
       Compare with shipped_at to calculate transit time.
@@ -93,6 +101,7 @@ dimensions:
     sql: '"IS_RETURNED"'
     description: Boolean flag indicating whether this order item has been returned
       by the customer.
+    synonyms: [ returned, was returned, refunded ]
     ai_context: Use this as a simple true/false filter to segment returned vs.
       non-returned items. More convenient than filtering on returned_at being
       non-null. Use to calculate return rates.
@@ -102,41 +111,41 @@ dimensions:
     description: Boolean flag indicating whether this order item has been
       successfully delivered to the customer.
     ai_context: Use this as a simple true/false filter to segment delivered vs.
-      undelivered items. More convenient than filtering on delivered_at being
-      non-null. Use to calculate delivery rates.
+      undelivered items.
 
   is_shipped:
     sql: '"IS_SHIPPED"'
     description: Boolean flag indicating whether this order item has been shipped
       from the warehouse.
     ai_context: Use this as a simple true/false filter to segment shipped vs.
-      unshipped items. More convenient than filtering on shipped_at being
-      non-null. Use to calculate shipment rates or identify backlogged items.
+      unshipped items.
 
   margin:
     sql: '"MARGIN"'
     description: The profit margin for this order item, representing the difference
       between sale price and cost.
+    synonyms: [ profit, gross margin, markup ]
     ai_context: Use this for profitability analysis. Sum or average this field to
       understand gross profit. Compare with sale_price to calculate margin
       percentage. Negative values indicate items sold at a loss.
 
   months_since_signup:
     sql: '"MONTHS_SINCE_SIGNUP"'
-    description: The number of months between the customer's signup date and the
-      date this order item was created.
+    description: The number of months between the customer signup date and the date
+      this order item was created.
+    synonyms: [ customer tenure, time since signup, customer age ]
     ai_context: Use this to analyze customer purchase behavior relative to their
       tenure. Useful for cohort analysis and understanding how long after signup
-      customers make purchases. Bin this field to group customers by tenure
-      stage.
+      customers make purchases.
 
   time_to_ship:
     sql: '"TIME_TO_SHIP"'
     description: The number of days between when the order was placed (created_at)
       and when it was shipped (shipped_at).
+    synonyms: [ shipping time, fulfillment time, days to ship, processing time ]
     ai_context: Use this to measure fulfillment speed and warehouse efficiency.
       Lower values indicate faster processing. Null if the item has not yet
-      shipped. Average this field to track operational performance over time.
+      shipped.
 
   status_complete:
     # Dimension is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
@@ -161,28 +170,33 @@ measures:
   count:
     description: Total count of order item records.
     aggregate_type: count
+    synonyms: [ item count, number of items, items sold ]
     ai_context: Use this to count the number of order line items. Note this counts
       individual items, not orders — use COUNT DISTINCT on order_id to count
-      unique orders, or COUNT DISTINCT on user_id to count unique customers.
+      unique orders.
 
   sale_price_average:
     sql: ${ecomm__order_items.sale_price}
     aggregate_type: average
+    synonyms: [ AOV, average order value, avg price, average sale price ]
 
   time_to_ship_average:
     sql: ${ecomm__order_items.time_to_ship}
     description: Average Time to Ship for Shipped Order
     aggregate_type: average
+    synonyms: [ avg shipping time, average fulfillment time ]
 
   margin_average:
     sql: ${ecomm__order_items.margin}
     aggregate_type: average
+    synonyms: [ average profit, avg margin ]
 
   margin_per_order:
     sql: CASE WHEN ${ecomm__order_items.count} = 0 THEN NULL ELSE
       COALESCE(${ecomm__order_items.margin_average}, 0) /
       ${ecomm__order_items.count} END
     label: Margin Per Order
+    synonyms: [ profit per order ]
 
   total_sales:
     # Measure is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
@@ -210,6 +224,7 @@ measures:
     description: "(Sum) Sale Price: The price at which this item was sold to the
       customer, in USD."
     aggregate_type: sum
+    synonyms: [ total revenue, total sales, revenue, sales, gross revenue, income ]
 
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
