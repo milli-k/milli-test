@@ -1,5 +1,5 @@
 # Reference this view as ecomm__users
-label: Uers
+label: Users
 #This description was pulled from dbt.
 description: Dimension table containing information about users
 
@@ -13,71 +13,82 @@ dimensions:
     #This description was pulled from dbt.
     description: Unique identifier for each user
     primary_key: true
+    synonyms: [ customer id, user id ]
 
   first_name:
     sql: '"FIRST_NAME"'
     #This description was pulled from dbt.
     description: First name of the user
+    synonyms: [ given name ]
 
   last_name:
     sql: '"LAST_NAME"'
     #This description was pulled from dbt.
     description: Last name of the user
+    synonyms: [ surname, family name ]
 
   email:
     sql: '"EMAIL"'
     #This description was pulled from dbt.
     description: Email address of the user
+    synonyms: [ email address, contact email ]
 
   age:
     sql: '"AGE"'
-    #This description was pulled from dbt.
-    description: Age of the user
+    description: Age of the user in years
+    synonyms: [ customer age, years old ]
 
   city:
     sql: '"CITY"'
     #This description was pulled from dbt.
     description: City where the user is located
+    synonyms: [ customer city, location city ]
 
   state:
     sql: '"STATE"'
     #This description was pulled from dbt.
     description: State where the user is located
+    synonyms: [ customer state, region, province ]
 
   country:
     sql: '"COUNTRY"'
     #This description was pulled from dbt.
     description: Country where the user is located
+    synonyms: [ customer country, nation ]
 
   zip:
     sql: '"ZIP"'
-    #This description was pulled from dbt.
-    description: ZIP code of the user's location
+    description: ZIP code of the user location
+    synonyms: [ zip code, postal code ]
 
   latitude:
     sql: '"LATITUDE"'
     #This description was pulled from dbt.
     description: Geographical latitude of the user's location
+    hidden: true
 
   longitude:
     sql: '"LONGITUDE"'
     #This description was pulled from dbt.
     description: Geographical longitude of the user's location
+    hidden: true
 
   gender:
     sql: '"GENDER"'
     #This description was pulled from dbt.
     description: Gender of the user
+    synonyms: [ sex ]
 
   created_at:
     sql: '"CREATED_AT"'
-    #This description was pulled from dbt.
-    description: Timestamp when the user account was created
+    description: Timestamp when the user account was created (signup date)
+    synonyms: [ signup date, registration date, join date, account created ]
 
   traffic_source:
     sql: '"TRAFFIC_SOURCE"'
-    #This description was pulled from dbt.
-    description: Source of traffic that led to user signup
+    description: The marketing channel that brought the user to sign up. Values
+      include Organic, Search, Email, Display, Facebook.
+    synonyms: [ acquisition channel, signup source, marketing channel, referral source ]
 
   _entity_user_id:
     # Entity is defined in the 'sem_uers' dbt semantic model (models/semantic-models/sem_users.yml)
@@ -86,12 +97,16 @@ dimensions:
 
 measures:
   count:
+    description: Total number of users/customers
     aggregate_type: count
+    synonyms: [ customer count, number of customers, total users, user count ]
 
   average_age:
     # Measure is defined in the 'sem_uers' dbt semantic model (models/semantic-models/sem_users.yml)
     sql: ${age}
+    description: Average age of users
     aggregate_type: average
+    synonyms: [ avg age, mean age ]
 
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
