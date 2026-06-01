@@ -122,7 +122,7 @@ measures:
 
   average_age:
     # Measure is defined in the 'sem_uers' dbt semantic model (models/semantic-models/sem_users.yml)
-    sql: ${ecomm__users.age}
+    sql: ${ecomm__omni_users_sv__ecomm_users.age}
     aggregate_type: average
 
 #The info below was pulled from your dbt repository and is read-only.
