@@ -8,8 +8,133 @@ fields:
     -ecomm__order_items.is_returned,
     -ecomm__order_items.is_delivered
   ]
+ai_fields:
+  [
+    ecomm__order_items.sale_price,
+    ecomm__order_items.sale_price_sum,
+    ecomm__order_items.sale_price_average,
+    ecomm__order_items.status,
+    ecomm__order_items.created_at,
+    ecomm__order_items.order_id,
+    ecomm__order_items.count,
+    ecomm__order_items.margin,
+    ecomm__order_items.margin_average,
+    ecomm__order_items.margin_per_order,
+    ecomm__order_items.time_to_ship,
+    ecomm__order_items.time_to_ship_average,
+    ecomm__order_items.shipped_at,
+    ecomm__order_items.delivered_at,
+    ecomm__order_items.returned_at,
+    ecomm__order_items.is_returned,
+    ecomm__order_items.months_since_signup,
+    ecomm__users.id,
+    ecomm__users.first_name,
+    ecomm__users.last_name,
+    ecomm__users.email,
+    ecomm__users.age,
+    ecomm__users.gender,
+    ecomm__users.city,
+    ecomm__users.state,
+    ecomm__users.country,
+    ecomm__users.traffic_source,
+    ecomm__users.created_at,
+    ecomm__users.count,
+    ecomm__users.average_age,
+    ecomm__products.brand,
+    ecomm__products.category,
+    ecomm__products.department,
+    ecomm__products.name,
+    ecomm__products.retail_price,
+    ecomm__products.count,
+    ecomm__inventory_items.product_name,
+    ecomm__inventory_items.product_brand,
+    ecomm__inventory_items.product_category,
+    ecomm__inventory_items.cost,
+    ecomm__inventory_items.count,
+    ecomm__inventory_items.total_cost
+  ]
 
 joins:
   ecomm__users: {}
   ecomm__inventory_items:
     ecomm__products: {}
+
+ai_context: |
+  This topic analyzes ecommerce order data at the line-item level.
+  Each row is one order item (line item), not one order. A single order (order_id) can have multiple items.
+
+  Terminology mapping:
+  - "revenue" or "sales" → ecomm__order_items.sale_price_sum (Total Revenue)
+  - "orders" or "order count" → COUNT DISTINCT ecomm__order_items.order_id
+  - "customers" or "buyers" → COUNT DISTINCT ecomm__users.id or ecomm__order_items.user_id
+  - "items sold" → ecomm__order_items.count
+  - "AOV" or "average order value" → ecomm__order_items.sale_price_average
+  - "margin" or "profit" → ecomm__order_items.margin_average or margin field
+  - "category" or "product category" → ecomm__products.category
+  - "brand" → ecomm__products.brand
+
+  Status values: Complete, Returned, Shipped, Processing, Cancelled.
+  For revenue calculations, filter to status = Complete unless the user says otherwise.
+
+  Behavioral guidance:
+  - For time-series or trend questions, default to weekly granularity sorted ascending by date.
+  - For "top N" questions, sort descending by the metric and limit to 10 unless specified.
+  - For customer counts, always use COUNT DISTINCT on user_id.
+  - For order counts, always use COUNT DISTINCT on order_id.
+  - Sale prices are in USD.
+
+sample_queries:
+  total_revenue_by_month:
+    query:
+      fields: [ "ecomm__order_items.created_at[month]", ecomm__order_items.sale_price_sum ]
+      base_view: ecomm__order_items
+      sorts:
+        - field: ecomm__order_items.created_at[month]
+      topic: ecomm__order_items
+    prompt: What is total revenue by month?
+    ai_context: Use sale_price_sum grouped by created_at month, sorted ascending
+  top_categories_by_revenue:
+    query:
+      fields: [ ecomm__products.category, ecomm__order_items.sale_price_sum ]
+      base_view: ecomm__order_items
+      limit: 10
+      sorts:
+        - field: ecomm__order_items.sale_price_sum
+          desc: true
+      topic: ecomm__order_items
+    prompt: What are the top selling product categories?
+    ai_context: Use sale_price_sum grouped by product category, sorted descending, limit 10
+  revenue_by_state:
+    query:
+      fields: [ ecomm__users.state, ecomm__order_items.sale_price_sum ]
+      base_view: ecomm__order_items
+      limit: 10
+      sorts:
+        - field: ecomm__order_items.sale_price_sum
+          desc: true
+      topic: ecomm__order_items
+    prompt: Which states generate the most revenue?
+    ai_context: Use sale_price_sum grouped by user state, sorted descending, limit 10
+  return_rate_by_category:
+    query:
+      fields:
+        [
+          ecomm__products.category,
+          ecomm__order_items.count,
+          ecomm__order_items.is_returned
+        ]
+      base_view: ecomm__order_items
+      sorts:
+        - field: ecomm__order_items.count
+          desc: true
+      topic: ecomm__order_items
+    prompt: What is the return rate by product category?
+    ai_context: Count items where is_returned is true divided by total count,
+      grouped by product category
+  avg_time_to_ship:
+    query:
+      fields: [ ecomm__order_items.time_to_ship_average ]
+      base_view: ecomm__order_items
+      topic: ecomm__order_items
+    prompt: What is the average time to ship?
+    ai_context: Use time_to_ship_average as the metric
