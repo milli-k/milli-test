@@ -1,0 +1,18 @@
+# Reference this view as omni_dbt__product_images
+schema_label: ""
+
+schema: omni_dbt
+table_name: PRODUCT_IMAGES
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  image:
+    sql: '"IMAGE"'
+
+measures:
+  count:
+    aggregate_type: count

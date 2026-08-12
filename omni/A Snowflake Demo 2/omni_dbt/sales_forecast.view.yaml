@@ -1,0 +1,16 @@
+# Reference this view as omni_dbt__sales_forecast
+schema_label: ""
+
+schema: omni_dbt
+table_name: SALES_FORECAST
+
+dimensions:
+  close_month:
+    sql: '"CLOSE_MONTH"'
+
+  forecast:
+    sql: '"FORECAST"'
+
+measures:
+  count:
+    aggregate_type: count

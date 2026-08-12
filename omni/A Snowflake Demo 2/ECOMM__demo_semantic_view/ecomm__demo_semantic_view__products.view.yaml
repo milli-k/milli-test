@@ -1,0 +1,130 @@
+# Reference this view as ecomm__demo_semantic_view__products
+# View is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+schema: ECOMM_SOURCE
+folder: ECOMM/demo_semantic_view
+table_name: PRODUCTS
+
+dimensions:
+  brand:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"BRAND"'
+    description: The BRAND column represents the manufacturer or brand name of the
+      product, categorizing it as either MG, MW, or 2XU.
+    synonyms: [ maker, manufacturer, label, trademark, company, producer, nameplate ]
+
+  category:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"CATEGORY"'
+    description: The CATEGORY column represents the product category, which groups
+      similar products together, such as accessories, plus-size items, and
+      swimwear, to help with product classification, reporting, and analysis.
+    synonyms:
+      [
+        type,
+        classification,
+        group,
+        kind,
+        genre,
+        product_type,
+        class,
+        product_category,
+        product_group
+      ]
+
+  department:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"DEPARTMENT"'
+    description: The department within the store where the product is located,
+      indicating whether the product is intended for women or men.
+    synonyms: [ division, section, category, group, sector, branch, unit ]
+
+  name:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"NAME"'
+    description: "Product Name: This column stores the names of various products,
+      which appear to be different types of caps, including their color,
+      material, and style."
+    synonyms: [ title, product_name, item_name, product_title, label, designation ]
+
+  sku:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"SKU"'
+    description: Unique identifier for each product in the catalog, used to
+      distinguish and track individual items across the system.
+    synonyms:
+      [
+        stock_keeping_unit,
+        product_code,
+        item_number,
+        product_id,
+        inventory_code,
+        product_identifier
+      ]
+
+  cost:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"COST"'
+    description: The cost of each product, representing the amount incurred by the
+      company to produce or acquire the product.
+    synonyms:
+      [
+        price,
+        expense,
+        expenditure,
+        amount,
+        charge,
+        fee,
+        rate,
+        value,
+        outlay,
+        payment
+      ]
+
+  distribution_center_id:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"DISTRIBUTION_CENTER_ID"'
+    description: The unique identifier for the distribution center where the product
+      is stored and shipped from.
+    synonyms:
+      [
+        warehouse_id,
+        logistics_center_id,
+        fulfillment_center_id,
+        shipping_hub_id,
+        supply_chain_id,
+        inventory_location_id,
+        storage_facility_id
+      ]
+
+  id:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"ID"'
+    description: Unique identifier for each product in the catalog.
+    synonyms:
+      [
+        identifier,
+        unique_id,
+        product_id,
+        product_key,
+        record_id,
+        row_id,
+        serial_number,
+        unique_identifier
+      ]
+
+  retail_price:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"RETAIL_PRICE"'
+    description: The retail price of each product, representing the amount that
+      customers pay for a product at the point of sale.
+    synonyms:
+      [
+        list_price,
+        sale_price,
+        sticker_price,
+        market_price,
+        msrp,
+        selling_price,
+        unit_price,
+        price_point
+      ]

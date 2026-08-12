@@ -1,0 +1,33 @@
+# Reference this view as fhir__int_fhir__medications
+schema: FHIR
+table_name: INT_FHIR__MEDICATIONS
+
+dimensions:
+  patient_id:
+    sql: '"PATIENT_ID"'
+    format: ID
+
+  code:
+    sql: '"CODE"'
+
+  name:
+    sql: '"NAME"'
+
+  resource_raw:
+    sql: '"RESOURCE_RAW"'
+
+measures:
+  count:
+    aggregate_type: count
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: int_fhir__medications
+  target_schema: demo
+  config:
+    schema: fhir
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('stg_fhir__medications')) }}
+    from {{ ref('stg_fhir__medications') }}

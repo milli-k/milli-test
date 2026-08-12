@@ -1,0 +1,11 @@
+# Reference this view as dynamic_connections
+schema: PUBLIC
+table_name: DYNAMIC_CONNECTIONS
+
+dimensions:
+  test:
+    sql: '"TEST"'
+
+measures:
+  count:
+    aggregate_type: count

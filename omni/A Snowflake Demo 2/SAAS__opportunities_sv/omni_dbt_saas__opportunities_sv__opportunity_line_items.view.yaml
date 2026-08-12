@@ -1,0 +1,119 @@
+# Reference this view as omni_dbt_saas__opportunities_sv__opportunity_line_items
+# View is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+schema_label: ""
+#This description was pulled from dbt.
+description: Line item details for opportunities including products, quantities, and pricing
+
+schema: omni_dbt_saas
+folder: SAAS/opportunities_sv
+table_name: OPPORTUNITY_LINE_ITEMS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for each opportunity line item
+    primary_key: true
+
+  opportunity_id:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"OPPORTUNITY_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Foreign key reference to the parent opportunity
+
+  product_id:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"PRODUCT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Foreign key reference to the product catalog
+
+  created_date:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"CREATED_DATE"'
+    #This description was pulled from dbt.
+    description: Date when the line item was added to the opportunity
+
+  quantity:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"QUANTITY"'
+    #This description was pulled from dbt.
+    description: Number of units for this product
+    synonyms: [ units, product_quantity ]
+
+  list_price:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"LIST_PRICE"'
+    #This description was pulled from dbt.
+    description: Standard list price per unit (with 1 decimal place precision)
+    synonyms: [ standard_price, published_price ]
+
+  sale_price:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"SALE_PRICE"'
+    #This description was pulled from dbt.
+    description: Actual sale price per unit after discounts (with 1 decimal place precision)
+    synonyms: [ negotiated_price, final_price ]
+
+  total_price:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"TOTAL_PRICE"'
+    #This description was pulled from dbt.
+    description: Total price for this line item (quantity * sale_price)
+    synonyms: [ line_item_total, line_item_value ]
+
+  arr:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"ARR"'
+    description: Annual recurring revenue for line item
+
+  acv:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"ACV"'
+    description: Annual contract value for line item
+
+  tcv:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"TCV"'
+    description: Total contract value for line item
+
+  contract_term_months:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"CONTRACT_TERM_MONTHS"'
+    description: Contract term in months
+
+  description:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"DESCRIPTION"'
+    #This description was pulled from dbt.
+    description: Additional description or notes for the line item
+
+  service_date:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"SERVICE_DATE"'
+    #This description was pulled from dbt.
+    description: Expected delivery or service date for this line item
+    synonyms: [ delivery_date, start_date, subscription_start_date ]
+
+measures:
+  count:
+    # Measure is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: COUNT(*)
+    description: Count of opportunity line items
+    synonyms: [ line_item_count, total_line_items, number_of_line_items ]
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: opportunity_line_items
+  target_schema: demo
+  description: Line item details for opportunities including products, quantities,
+    and pricing
+  config:
+    schema: saas
+    materialized: table
+  code: |-
+    select * from {{ ref('stg_saas__opportunity_line_items') }}
+    WHERE CREATED_DATE <= current_date

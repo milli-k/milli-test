@@ -1,0 +1,86 @@
+# Reference this view as omni_dbt_ecomm__inventory_management_sv__products
+# View is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+schema_label: ""
+#This description was pulled from dbt.
+description: Dimension table containing information about products
+
+schema: omni_dbt_ecomm
+folder: ECOMM/inventory_management_sv
+table_name: PRODUCTS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for each product
+    primary_key: true
+
+  cost:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"COST"'
+    #This description was pulled from dbt.
+    description: Cost of the product
+
+  category:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"CATEGORY"'
+    #This description was pulled from dbt.
+    description: Category of the product
+
+  name:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"NAME"'
+    #This description was pulled from dbt.
+    description: Name of the product
+
+  brand:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"BRAND"'
+    #This description was pulled from dbt.
+    description: Brand of the product
+
+  retail_price:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"RETAIL_PRICE"'
+    #This description was pulled from dbt.
+    description: Retail price of the product
+
+  department:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"DEPARTMENT"'
+    #This description was pulled from dbt.
+    description: Department the product belongs to
+
+  sku:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"SKU"'
+    #This description was pulled from dbt.
+    description: Stock Keeping Unit of the product
+
+  distribution_center_id:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"DISTRIBUTION_CENTER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier of the distribution center for the product
+
+measures:
+  count:
+    # Measure is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: COALESCE(COUNT(*), 0)
+    description: Total number of products
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: products
+  target_schema: demo
+  description: Dimension table containing information about products
+  config:
+    schema: ecomm
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('stg_ecomm__products')) }}
+    from {{ ref('stg_ecomm__products') }}

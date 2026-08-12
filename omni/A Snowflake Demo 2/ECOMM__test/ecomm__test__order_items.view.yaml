@@ -1,0 +1,188 @@
+# Reference this view as ecomm__test__order_items
+# View is defined in the semantic view TEST in the data warehouse
+label: Order Items
+#This description was pulled from dbt.
+description: Dimension table containing information about customer orders
+
+schema: ECOMM
+folder: ECOMM/test
+table_name: ORDER_ITEMS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for each order line item
+    primary_key: true
+
+  order_id:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"ORDER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier for the order
+
+  user_id:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"USER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier of the user who placed the order
+
+  inventory_item_id:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"INVENTORY_ITEM_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier of the inventory item in the order
+
+  sale_price:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"SALE_PRICE"'
+    #This description was pulled from dbt.
+    description: Price at which the item was sold
+
+  status:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"STATUS"'
+    #This description was pulled from dbt.
+    description: Current status of the order
+    all_values: [ Complete, Shipped, Processing, Cancelled, Returned ]
+
+  created_at:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"CREATED_AT"'
+    #This description was pulled from dbt.
+    description: Timestamp when the order was created
+
+  returned_at:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"RETURNED_AT"'
+    #This description was pulled from dbt.
+    description: Timestamp when the order was returned (if applicable)
+
+  shipped_at:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"SHIPPED_AT"'
+    #This description was pulled from dbt.
+    description: Timestamp when the order was shipped
+
+  delivered_at:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"DELIVERED_AT"'
+    #This description was pulled from dbt.
+    description: Timestamp when the order was delivered
+
+  is_returned:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"IS_RETURNED"'
+    #This description was pulled from dbt.
+    description: Boolean indicating if the order was returned
+
+  is_delivered:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"IS_DELIVERED"'
+    #This description was pulled from dbt.
+    description: Boolean indicating if the order was delivered
+
+  is_shipped:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"IS_SHIPPED"'
+    #This description was pulled from dbt.
+    description: Boolean indicating if the order was shipped
+
+  margin:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"MARGIN"'
+    #This description was pulled from dbt.
+    description: Profit margin for the order
+
+  months_since_signup:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"MONTHS_SINCE_SIGNUP"'
+    #This description was pulled from dbt.
+    description: Number of months since the user signed up
+
+  time_to_ship:
+    # Dimension is defined in the semantic view TEST in the data warehouse
+    sql: '"TIME_TO_SHIP"'
+    #This description was pulled from dbt.
+    description: Time taken to ship the order
+
+  status_complete:
+    # Dimension is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: CASE WHEN ${status} = 'Complete' THEN TRUE ELSE FALSE END
+
+  _entity_order_item_id:
+    # Entity is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${id}
+    hidden: true
+
+  _entity_user_id:
+    # Entity is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${user_id}
+    hidden: true
+
+  _entity_inventory_item_id:
+    # Entity is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${inventory_item_id}
+    hidden: true
+
+measures:
+  count:
+    aggregate_type: count
+
+  total_sales:
+    # Measure is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${ecomm__order_items.sale_price}
+    aggregate_type: sum
+
+  avg_sale_price:
+    # Measure is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${ecomm__order_items.sale_price}
+    aggregate_type: average
+
+  total_margin:
+    # Measure is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${ecomm__order_items.margin}
+    aggregate_type: sum
+
+  avg_margin:
+    # Measure is defined in the 'sem_order_items' dbt semantic model (models/semantic-models/sem_order_items.yml)
+    sql: ${ecomm__order_items.margin}
+    aggregate_type: average
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: order_items
+  target_schema: demo
+  description: Dimension table containing information about customer orders
+  config:
+    schema: ecomm
+    materialized: table
+  code: |-
+    select
+        order_items.id,
+        order_items.order_id,
+        order_items.user_id,
+        order_items.inventory_item_id,
+        order_items.sale_price,
+        order_items.status,
+        order_items.created_at,
+        order_items.returned_at,
+        order_items.shipped_at,
+        order_items.delivered_at as delivered_at,
+        order_items.returned_at is not null as is_returned,
+        order_items.delivered_at is not null as is_delivered,
+        order_items.shipped_at is not null as is_shipped,
+        order_items.sale_price - inventory_items.cost as margin,
+        datediff(month, users.created_at, order_items.created_at) as months_since_signup,
+        datediff('days', order_items.created_at, order_items.shipped_at) as time_to_ship
+    from {{ ref("int_ecomm__order_items") }} as order_items
+    left join
+        {{ ref("int_ecomm__inventory_items") }} as inventory_items
+        on order_items.inventory_item_id = inventory_items.id
+    left join {{ ref("int_ecomm__users") }} as users on order_items.user_id = users.id
+  referenced_by: [ monthly_sales_overview, order_items_agg ]

@@ -1,0 +1,15 @@
+# Reference this view as analytics_dev_dbt_mkoch_ecomm__monthly_rollup
+catalog: ANALYTICS_DEV
+schema: DBT_MKOCH_ECOMM
+table_name: MONTHLY_ROLLUP
+
+dimensions:
+  created_at_month_:
+    sql: '"CREATED_AT[MONTH]"'
+
+  sale_price_sum:
+    sql: '"SALE_PRICE_SUM"'
+
+measures:
+  count:
+    aggregate_type: count

@@ -1,0 +1,189 @@
+# Reference this view as ecomm__demo_semantic_view__inventory_items
+# View is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+schema: ECOMM_SOURCE
+folder: ECOMM/demo_semantic_view
+table_name: INVENTORY_ITEMS
+
+dimensions:
+  created_at:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"CREATED_AT"'
+    description: Date and time when the inventory item was created.
+    synonyms:
+      [
+        created_date,
+        creation_time,
+        date_created,
+        timestamp_created,
+        record_created_at,
+        entry_date,
+        insertion_time,
+        added_at,
+        registered_at
+      ]
+
+  product_brand:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"PRODUCT_BRAND"'
+    description: The brand name of the product.
+    synonyms:
+      [
+        manufacturer,
+        maker,
+        label,
+        trademark,
+        brand_name,
+        product_maker,
+        product_manufacturer
+      ]
+
+  product_category:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"PRODUCT_CATEGORY"'
+    description: The category of the product, such as clothing type or accessory
+      classification, that the inventory item belongs to.
+    synonyms:
+      [
+        product_type,
+        item_category,
+        product_group,
+        category_name,
+        product_classification,
+        item_type,
+        product_segment
+      ]
+
+  product_department:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"PRODUCT_DEPARTMENT"'
+    description: The department within the store where the product is typically
+      located, such as Men's or Women's section.
+    synonyms:
+      [
+        product_category,
+        department_name,
+        product_section,
+        product_group,
+        product_classification,
+        product_type,
+        product_family,
+        product_line
+      ]
+
+  product_name:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"PRODUCT_NAME"'
+    description: This column stores the names of the various products stocked in the
+      inventory, providing a descriptive title for each item.
+    synonyms:
+      [
+        item_name,
+        product_title,
+        product_description,
+        item_description,
+        product_label
+      ]
+
+  product_sku:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"PRODUCT_SKU"'
+    description: Unique identifier for each product in the inventory.
+    synonyms:
+      [
+        stock_keeping_unit,
+        product_code,
+        item_number,
+        product_identifier,
+        sku_number,
+        product_stock_code
+      ]
+
+  sold_at:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"SOLD_AT"'
+    description: Date and time when the inventory item was sold.
+    synonyms:
+      [
+        sale_date,
+        sold_on,
+        date_sold,
+        transaction_date,
+        purchase_date,
+        sale_timestamp
+      ]
+
+  cost:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"COST"'
+    description: The cost of each inventory item.
+    synonyms:
+      [
+        price,
+        expense,
+        expenditure,
+        fee,
+        charge,
+        outlay,
+        payment,
+        amount,
+        rate,
+        value
+      ]
+
+  id:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"ID"'
+    description: Unique identifier for each inventory item.
+    primary_key: true
+    synonyms:
+      [
+        identifier,
+        unique_id,
+        record_id,
+        row_id,
+        key,
+        unique_identifier,
+        serial_number
+      ]
+
+  product_distribution_center_id:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    description: The unique identifier for the distribution center where the
+      inventory item is stored.
+    synonyms:
+      [
+        distribution_center_id,
+        warehouse_id,
+        product_warehouse_number,
+        logistics_center_id,
+        product_storage_location_id,
+        fulfillment_center_id
+      ]
+
+  product_id:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"PRODUCT_ID"'
+    description: Unique identifier for a product in the inventory.
+    synonyms: [ product_code, item_id, product_number, sku_id, product_key, item_key ]
+
+  product_retail_price:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"PRODUCT_RETAIL_PRICE"'
+    description: The retail price at which each product is sold to customers.
+    synonyms:
+      [
+        list_price,
+        retail_cost,
+        product_price,
+        sale_price,
+        msrp,
+        sticker_price,
+        shelf_price,
+        unit_price
+      ]
+
+measures:
+  total_cost:
+    # Measure is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: SUM("COST")

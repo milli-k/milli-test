@@ -1,0 +1,280 @@
+# Reference this view as omni_dbt_saas__opportunities_sv__opportunities
+# View is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+schema_label: ""
+#This description was pulled from dbt.
+description: Table for all Salesforce opportunities in Blobby Data
+
+schema: omni_dbt_saas
+folder: SAAS/opportunities_sv
+table_name: OPPORTUNITIES
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique Identifier for the opportunity.  This should be the
+      salesforce record
+    primary_key: true
+
+  account_id:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"ACCOUNT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for an account
+
+  name:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"NAME"'
+    #This description was pulled from dbt.
+    description: Opportunity name.  Should be account name + opportunity type
+    synonyms: [ opportunity_name, deal_name ]
+
+  stage_name:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"STAGE_NAME"'
+    #This description was pulled from dbt.
+    description: Current pipeline stage the opportunity is in
+    synonyms: [ stage, pipeline_stage, opportunity_gate ]
+
+  amount:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"AMOUNT"'
+    #This description was pulled from dbt.
+    description: Contract amount for given opportunity
+    synonyms: [ deal_amount, opportunity_amount, contract_value ]
+
+  arr:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"ARR"'
+    description: Annual recurring revenue
+
+  acv:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"ACV"'
+    description: Annual contract value
+
+  tcv:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"TCV"'
+    description: Total contract value
+
+  contract_term_months:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"CONTRACT_TERM_MONTHS"'
+    description: Length in months of the contract
+
+  probability:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"PROBABILITY"'
+    #This description was pulled from dbt.
+    description: Probability that the given opportunity will be won
+
+  close_date:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"CLOSE_DATE"'
+    #This description was pulled from dbt.
+    description: Forecasted close date for the opportunity
+    synonyms: [ expected_close_date, forecast_close_date ]
+
+  type:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"TYPE"'
+    #This description was pulled from dbt.
+    description: Type of opportunity.  New business, upsell/expansion, or renewal
+    synonyms: [ opportunity_type, deal_type, business_type ]
+
+  next_steps:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"NEXT_STEPS"'
+    description: Action items for moving the deal forward
+
+  lead_source:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"LEAD_SOURCE"'
+    #This description was pulled from dbt.
+    description: Channel the opportunity was sourced from
+    synonyms: [ source, opportunity_source, lead_channel, acquisition_channel ]
+
+  is_won:
+    sql: '"IS_WON"'
+    #This description was pulled from dbt.
+    description: Boolean field to determine if the opportunity is won or not
+
+  forecast_category:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"FORECAST_CATEGORY"'
+    #This description was pulled from dbt.
+    description: Sales manager's forecast category
+    synonyms: [ forecast, sales_forecast_category ]
+
+  owner_id:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"OWNER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: ID of account executive who currently owns the account
+    synonyms: [ sales_rep_id, opportunity_owner_id ]
+
+  sales_engineer_id:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"SALES_ENGINEER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: ID of sales engineer who currently owns the account
+    synonyms: [ se_id, sales_engineer ]
+
+  created_date:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"CREATED_DATE"'
+    #This description was pulled from dbt.
+    description: Date the opportunity was created
+
+  contact_id:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"CONTACT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier for main point of contact at the account
+
+  last_stage_change_date:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"LAST_STAGE_CHANGE_DATE"'
+    #This description was pulled from dbt.
+    description: Date of last change in opportunity stage
+
+  first_demo_date:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"FIRST_DEMO_DATE"'
+    #This description was pulled from dbt.
+    description: Date of the first demo
+
+  trial_start_date:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"TRIAL_START_DATE"'
+    #This description was pulled from dbt.
+    description: Date of the trial start day
+
+  competitor:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"COMPETITOR"'
+    #This description was pulled from dbt.
+    description: Competitors in the sales process
+
+  loss_reason:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"LOSS_REASON"'
+    #This description was pulled from dbt.
+    description: Reason for opportunity not winning
+
+  win_reason:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"WIN_REASON"'
+    description: The win reason defined by the AE in salesforce
+
+  risk_score:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"RISK_SCORE"'
+    description: Numeric risk level (1-100, 100 is locked, 1 is highly risky)
+
+  risk_flags:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"RISK_FLAGS"'
+    description: Identified risks from the AE
+
+  identified_pain:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"IDENTIFIED_PAIN"'
+    description: Identified customer pain points
+
+  risk_details:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"RISK_DETAILS"'
+    description: Detailed risk information
+
+  ae_notes:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"AE_NOTES"'
+    description: Account executive notes
+
+  status:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: CASE WHEN ${omni_dbt_saas__opportunities_sv__opportunities.stage_name} IN
+      ('Negotiate', 'Pre-Qualified', 'Qualified', 'Trial', 'Trial Positive')
+      THEN 'Open Pipeline' WHEN
+      ${omni_dbt_saas__opportunities_sv__opportunities.stage_name} IN ('Closed
+      Won', 'Closed Lost') THEN 'Closed' ELSE 'Other' END
+    description: Status of opportunity in current pipeline (Open Pipeline, Closed, Other)
+
+measures:
+  count:
+    # Measure is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: COUNT(*)
+    description: Count of opportunities
+    synonyms:
+      [
+        opportunity_count,
+        total_opportunities,
+        number_of_opportunities,
+        deal_count
+      ]
+
+  amount_average:
+    # Measure is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: AVG(${omni_dbt_saas__opportunities_sv__opportunities.amount})
+    description: Average ARR per opportunity
+    synonyms: [ avg_arr, average_deal_size, avg_deal_value, average_revenue ]
+
+  amount_sum:
+    # Measure is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: COALESCE(SUM(${omni_dbt_saas__opportunities_sv__opportunities.amount}), 0)
+    description: Total Annual Recurring Revenue across all opportunities
+    synonyms: [ total_revenue, total_arr, sum_amount, total_deal_value ]
+
+  amount_sum_pipeline:
+    # Measure is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: COALESCE(SUM(CASE WHEN
+      ${omni_dbt_saas__opportunities_sv__opportunities.stage_name} IN
+      ('Pre-Qualified', 'Qualified', 'Trial', 'Trial Positive', 'Negotiate')
+      THEN ${omni_dbt_saas__opportunities_sv__opportunities.amount} ELSE NULL
+      END), 0)
+    description: Total pipeline value for open opportunities
+    synonyms: [ pipeline_value, open_pipeline, pipeline_arr, total_open_deals ]
+
+  amount_sum_won:
+    # Measure is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: COALESCE(SUM(CASE WHEN
+      ${omni_dbt_saas__opportunities_sv__opportunities.is_won} = TRUE THEN
+      ${omni_dbt_saas__opportunities_sv__opportunities.amount} ELSE NULL END),
+      0)
+    description: Total ARR from won opportunities
+    synonyms: [ won_revenue, won_arr, total_won_deals, closed_won_revenue ]
+
+  pipeline_count:
+    # Measure is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: COUNT(CASE WHEN
+      ${omni_dbt_saas__opportunities_sv__opportunities.stage_name} IN
+      ('Pre-Qualified', 'Qualified', 'Trial', 'Trial Positive', 'Negotiate')
+      THEN 1 ELSE NULL END)
+    description: Count of opportunities in open pipeline stages
+    synonyms: [ pipeline_opportunities, open_deals_count, pipeline_deal_count ]
+
+  won_opps_count:
+    # Measure is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: COUNT(CASE WHEN
+      ${omni_dbt_saas__opportunities_sv__opportunities.stage_name} = 'Closed
+      Won' THEN 1 ELSE NULL END)
+    description: Count of won opportunities
+    synonyms: [ won_deals, closed_won_count, won_opportunities, deals_won ]
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: opportunities
+  target_schema: demo
+  description: Table for all Salesforce opportunities in Blobby Data
+  config:
+    schema: saas
+    materialized: table
+  code: select * from {{ ref('int_saas__opportunities') }}

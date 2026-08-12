@@ -1,0 +1,222 @@
+# Reference this view as ecomm__demo_semantic_view__users
+# View is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+schema: ECOMM_SOURCE
+folder: ECOMM/demo_semantic_view
+table_name: USERS
+
+dimensions:
+  age:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"AGE"'
+    description: The age of the user in years.
+    synonyms:
+      [
+        years_old,
+        years_of_age,
+        age_in_years,
+        birth_age,
+        years_since_birth,
+        age_value
+      ]
+
+  city:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"CITY"'
+    description: The city where the user is located.
+    synonyms:
+      [
+        town,
+        municipality,
+        metropolis,
+        urban_area,
+        locality,
+        settlement,
+        burg,
+        municipality_name
+      ]
+
+  country:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"COUNTRY"'
+    description: The country of origin or residence of the user.
+    synonyms:
+      [
+        nation,
+        land,
+        territory,
+        state,
+        region,
+        homeland,
+        nationality,
+        geographical_area,
+        sovereign_state
+      ]
+
+  created_at:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"CREATED_AT"'
+    description: Date and time when the user account was created.
+    synonyms:
+      [
+        created_date,
+        creation_time,
+        registration_date,
+        signup_date,
+        timestamp,
+        date_created,
+        joined_at,
+        account_created,
+        user_since
+      ]
+
+  email:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"EMAIL"'
+    description: The email address associated with each user's account.
+    synonyms:
+      [
+        email_address,
+        email_id,
+        user_email,
+        contact_email,
+        mail_id,
+        electronic_mail
+      ]
+
+  first_name:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"FIRST_NAME"'
+    description: The first name of the user.
+    synonyms:
+      [
+        given_name,
+        first_name,
+        forename,
+        personal_name,
+        christian_name,
+        baptismal_name
+      ]
+
+  gender:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"GENDER"'
+    description: The GENDER column represents the biological or self-identified sex
+      of a user, categorized as either Male or Female.
+    synonyms: [ sex, male_female, demographic, biological_sex, sex_category ]
+
+  last_name:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"LAST_NAME"'
+    description: The last name of the user.
+    synonyms:
+      [
+        surname,
+        family_name,
+        last_name_field,
+        full_last_name,
+        person_last_name,
+        user_last_name,
+        customer_last_name,
+        individual_last_name
+      ]
+
+  state:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"STATE"'
+    description: This column represents the local authority or borough where a user
+      is located, as identified by a specific geographic area within the UK.
+    synonyms:
+      [
+        province,
+        region,
+        territory,
+        county,
+        parish,
+        prefecture,
+        district,
+        area,
+        jurisdiction,
+        locale
+      ]
+
+  traffic_source:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"TRAFFIC_SOURCE"'
+    description: The source through which a user arrived at the website or platform,
+      such as organic search, paid search, or email marketing campaigns.
+    synonyms:
+      [
+        traffic_channel,
+        referral_source,
+        source_of_traffic,
+        website_referrer,
+        origin_of_visit,
+        visitor_source,
+        lead_source,
+        marketing_channel
+      ]
+
+  zip:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"ZIP"'
+    description: Postal Code of the user's location.
+    synonyms:
+      [
+        postal_code,
+        postcode,
+        zip_code,
+        zip_number,
+        postal_number,
+        mailing_code
+      ]
+
+  id:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"ID"'
+    description: Unique identifier for a user in the system.
+    primary_key: true
+    synonyms:
+      [
+        user_id,
+        identifier,
+        unique_id,
+        user_key,
+        record_id,
+        entity_id,
+        object_id
+      ]
+
+  latitude:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"LATITUDE"'
+    description: Latitude of the user's location, representing the angular distance
+      of a place north or south of the Earth's equator, measured in decimal
+      degrees.
+    synonyms:
+      [
+        lat,
+        geographic_latitude,
+        latitude_coordinate,
+        lat_decimal,
+        latitude_value
+      ]
+
+  longitude:
+    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: '"LONGITUDE"'
+    description: Longitude of the user's location, representing the angular distance
+      of a point on the Earth's surface, measured in decimal degrees east or
+      west of the prime meridian.
+    synonyms:
+      [
+        east_west_coordinate,
+        easting,
+        geographic_longitude,
+        longitudinal_coordinate,
+        x_coordinate
+      ]
+
+measures:
+  average_age:
+    # Measure is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
+    sql: AVG("AGE")

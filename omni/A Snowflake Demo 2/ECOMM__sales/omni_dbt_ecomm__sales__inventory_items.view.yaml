@@ -1,0 +1,134 @@
+# Reference this view as omni_dbt_ecomm__sales__inventory_items
+# View is defined in the semantic view SALES in the data warehouse
+schema_label: ""
+#This description was pulled from dbt.
+description: Dimension table containing information about inventory items
+
+schema: omni_dbt_ecomm
+folder: ECOMM/sales
+table_name: INVENTORY_ITEMS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier for each inventory item
+    primary_key: true
+
+  product_id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier of the associated product
+
+  created_at:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"CREATED_AT"'
+    #This description was pulled from dbt.
+    description: Timestamp when the inventory item was created
+    synonyms: [ inventory date, received date, stock date ]
+
+  sold_at:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"SOLD_AT"'
+    #This description was pulled from dbt.
+    description: Timestamp when the item was sold
+    synonyms: [ inventory sold date, sale date, sold date ]
+
+  cost:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"COST"'
+    #This description was pulled from dbt.
+    description: Cost of the inventory item
+    synonyms: [ cogs, inventory cost, item cost, unit cost ]
+
+  product_category:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_CATEGORY"'
+    #This description was pulled from dbt.
+    description: Category of the product
+    synonyms: [ category, item category, merchandise category, product type ]
+
+  product_name:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_NAME"'
+    #This description was pulled from dbt.
+    description: Name of the product
+    synonyms: [ item name, product description, product title, sku name ]
+
+  product_brand:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_BRAND"'
+    #This description was pulled from dbt.
+    description: Brand of the product
+    synonyms: [ brand name, label, make, manufacturer ]
+
+  product_retail_price:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_RETAIL_PRICE"'
+    #This description was pulled from dbt.
+    description: Retail price of the product
+    synonyms: [ list price, msrp, sticker price ]
+
+  product_department:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_DEPARTMENT"'
+    #This description was pulled from dbt.
+    description: Department the product belongs to
+    synonyms: [ business unit, department, division, section ]
+
+  product_sku:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_SKU"'
+    #This description was pulled from dbt.
+    description: Stock Keeping Unit of the product
+    synonyms: [ item number, product code, sku, stock code, upc ]
+
+  product_distribution_center_id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Identifier of the distribution center for the product
+    synonyms: [ dc id, fulfillment center, warehouse id ]
+
+measures:
+  count:
+    aggregate_type: count
+
+  average_cost:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: AVG(${omni_dbt_ecomm__sales__inventory_items.cost})
+    description: Average cost per item sold, useful for cost trend analysis and
+      margin planning.
+    synonyms: [ avg cost, mean cost, unit cost average ]
+
+  total_cost:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: SUM(${omni_dbt_ecomm__sales__inventory_items.cost})
+    description: Total cost of goods sold (COGS), representing the direct costs of
+      inventory sold. Essential for profitability analysis.
+    synonyms:
+      [
+        cogs,
+        cost of goods sold,
+        direct costs,
+        total cost of sales,
+        total expense
+      ]
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: inventory_items
+  target_schema: demo
+  description: Dimension table containing information about inventory items
+  config:
+    schema: ecomm
+    materialized: table
+  code: |-
+    select
+      {{ dbt_utils.star(ref('int_ecomm__inventory_items')) }}
+    from {{ ref('int_ecomm__inventory_items') }}

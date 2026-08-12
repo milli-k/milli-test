@@ -1,0 +1,131 @@
+# Reference this view as saas__opportunities_sv__users
+# View is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+#This description was pulled from dbt.
+description: Data Blobby sales team table
+
+schema: SAAS
+folder: SAAS/opportunities_sv
+table_name: USER
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"ID"'
+    format: ID
+    #This description was pulled from dbt.
+    description: Unique identifier of the Data Blobby Employee
+    primary_key: true
+
+  first_name:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"FIRST_NAME"'
+    #This description was pulled from dbt.
+    description: First Name of the employee
+
+  last_name:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"LAST_NAME"'
+    #This description was pulled from dbt.
+    description: Last name of the employee
+
+  email:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"EMAIL"'
+    #This description was pulled from dbt.
+    description: Employee Data Blobby email address
+    synonyms: [ employee_email, user_email ]
+
+  role:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"ROLE"'
+    #This description was pulled from dbt.
+    description: Employee role
+    synonyms: [ job_role, employee_role, user_role, position ]
+
+  region:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"REGION"'
+    #This description was pulled from dbt.
+    description: Region the employee covers
+
+  segment:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"SEGMENT"'
+    #This description was pulled from dbt.
+    description: Account segement the employee covers
+
+  manager_id:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"MANAGER_ID"'
+    format: ID
+    description: Manager's user ID
+
+  se_id:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"SE_ID"'
+    format: ID
+    description: Sales engineer ID
+
+  quota_target:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"QUOTA_TARGET"'
+    description: Quota target
+
+  quota_2024:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"QUOTA_2024"'
+    description: 2024 quota
+
+  quota_2025:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"QUOTA_2025"'
+    description: 2025 quota
+
+  quota_2026:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"QUOTA_2026"'
+    description: 2026 quota
+
+  quota_attainment_pct:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"QUOTA_ATTAINMENT_PCT"'
+    description: Quota attainment percentage
+
+  performance_tier:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"PERFORMANCE_TIER"'
+    description: Performance tier classification
+
+  created_date:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"CREATED_DATE"'
+    #This description was pulled from dbt.
+    description: Date employee started
+    synonyms: [ start_date, hire_date, employee_start_date ]
+
+  ramp_end_date:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: '"RAMP_END_DATE"'
+    description: Ramp end date
+
+  name:
+    # Dimension is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: "\"FIRST_NAME\" || ' ' || \"LAST_NAME\""
+    description: Full name of the employee
+
+measures:
+  count:
+    # Measure is defined in the semantic view OPPORTUNITIES_SV in the data warehouse
+    sql: COUNT(*)
+    description: Count of users (employees)
+    synonyms: [ user_count, total_users, employee_count, number_of_employees ]
+
+#The info below was pulled from your dbt repository and is read-only.
+dbt:
+  name: user
+  target_schema: demo
+  description: Data Blobby sales team table
+  config:
+    schema: saas
+    materialized: table
+  code: select * from {{ ref('int_saas__users')}}
