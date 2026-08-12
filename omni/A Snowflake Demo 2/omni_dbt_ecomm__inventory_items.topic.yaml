@@ -1,0 +1,6 @@
+base_view: omni_dbt_ecomm__inventory_items
+label: Inventory Items
+
+joins:
+  omni_dbt_ecomm__products:
+    omni_dbt_ecomm__distribution_centers: {}
