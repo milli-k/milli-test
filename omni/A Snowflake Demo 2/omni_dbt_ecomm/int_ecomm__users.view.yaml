@@ -83,6 +83,11 @@ measures:
   count:
     aggregate_type: count
 
+  age_average:
+    sql: ${omni_dbt_ecomm__int_ecomm__users.age}
+    description: "(Average) Age: Age of the user"
+    aggregate_type: average
+
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: int_ecomm__users

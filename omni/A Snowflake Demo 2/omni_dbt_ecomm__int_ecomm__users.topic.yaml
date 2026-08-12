@@ -1,0 +1,3 @@
+base_view: omni_dbt_ecomm__int_ecomm__users
+
+joins: {}
