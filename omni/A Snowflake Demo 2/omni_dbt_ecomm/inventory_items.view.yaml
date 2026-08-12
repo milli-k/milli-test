@@ -80,6 +80,11 @@ measures:
     description: "(Sum) Cost: Cost of the inventory item"
     aggregate_type: sum
 
+  cost_average:
+    sql: ${omni_dbt_ecomm__inventory_items.cost}
+    description: "(Average) Cost: Cost of the inventory item"
+    aggregate_type: average
+
 #The info below was pulled from your dbt repository and is read-only.
 dbt:
   name: inventory_items
